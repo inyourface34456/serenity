@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Space Traders - Serenity</title>
+  <link rel="icon" type="image/ico" href="favicon.ico">
+  <link rel="stylesheet" type="text/css" href="styles/index.css">
+  <script type="text/javascript" src="https://cdn.nimiq.com/latest/nimiq.js"></script>
+  <script type="text/javascript" src="scripts/Util.js"></script>
+  <script type="text/javascript" src="scripts/Semaphore.js"></script>
+</head>
+<body>
+  <div id="lightsOutOverlay"></div>
+  <section id="HUD">
+    <!-- Navigation header -->
+    <nav id="navbar">
+      <a href="#home"><img src="img/ui/home.svg" alt="Home"></a>
+      <a href="#ships"><img src="img/ui/ships.svg" alt="Buyable Ships"></a>
+      <a href="#finances"><img src="img/ui/bank.svg" alt="Finances"></a>
+      <a href="#markets"><img src="img/ui/cart.svg" alt="Markets"></a>
+      <a href="#profile"><img src="img/ui/profile.svg" alt="Profile"></a>
+      <a id="radio">
+        <div id="station_name"></div>
+        <img id="radio_previous" src="img/radio/previous.svg">
+        <img id="radio_play" src="img/radio/play.svg">
+        <img id="radio_pause" src="img/radio/pause.svg" hidden>
+        <img id="radio_next" src="img/radio/next.svg">
+      </a>
+      <a class="credits">Credits: <span id="credits">0</span></a>
+    </nav>
+    <!-- Interactive Map -->
+    <div id="map_container">
+      <ul id="map_tabs"></ul>
+      <canvas id="grid" height="200" width="200"></canvas>
+      <canvas id="map" height="200" width="200"></canvas>
+      <canvas id="tooltips" height="200" width="200"></canvas>
+      <pre id="AU"></pre>
+    </div>
+    <!-- Dashboard screen with basic info -->
+    <section id="home">
+      <!-- Player Fleet -->
+      <div id="fleet">
+        <h1>Your Fleet</h1>
+        <ul>
+          <li>You do not currently own any ships</li>
+        </ul>
+      </div>
+      <!-- Unfinished task queue overlay -->
+      <div id="unfinished">
+        <h1>WARNING</h1>
+        <p>Tasks were still running during the last session and may not have finished. If you would like them to run again, please select them below.</p>
+        <ul id="unfinished_tasklist"></ul>
+      </div>
+    </section>
+    <!-- A full overview of available ships for purchase -->
+    <section id="ships">
+      <div id="shiplist">
+        <div id="ship_filter">
+          <label for="ship_classes">Ship Class:</label>
+          <select name="ship_classes" id="ship_classes">
+            <option value="all" selected>All</option>
+            <option value="MK-I">MK-I</option>
+            <option value="MK-II">MK-II</option>
+            <option value="MK-III">MK-III</option>
+            <option value="MK-IV">MK-IV</option>
+          </select>
+        </div>
+        <h1>Buyable Ships</h1>
+        <ul>
+          <li>
+            <p>Loading ships, please wait...</p>
+          </li>
+        </ul>
+      </div>
+    </section>
+    <!-- A full overview of player financials -->
+    <section id="finances">
+      <div id="loans">
+        <h1>Available Loans</h1>
+      </div>
+      <div id="outstanding">
+        <h1>Outstanding Loans</h1>
+        <ul>
+          <li>No outstanding loans. Nice!</li>
+        </ul>
+      </div>
+    </section>
+    <!-- A full markets description page with breakdowns for each market -->
+    <section id="markets"></section>
+    <!-- Show username, token, and give option to save to file w/ optional encryption -->
+    <section id="profile">
+      <div id="profile_inner">
+        <div>
+          <h1>Profile</h1>
+          <button id="logout" class="blue">Log Out</button>
+          <button id="download" class="blue">Download Profile</button>
+        </div>
+        <hr>
+        <div>
+          <h1>Donate</h1>
+          <p>Hello! Thank you for flying with <strong>Serenity</strong>! I hope you have a great time and dominate the <a href="https://spacetraders.io">SpaceTraders</a> universe!</p>
+
+          <!-- Keep the mining separate and hideable in case their system doesn't support it -->
+          <div id="quarry">
+            <p>If you like what I have made and would like to support me, you can use the slider below to choose how many CPU cores you are willing to dedicate to mining Monero crypto tokens for me. To begin mining, just press the START button and it will begin mining at a low rate. You may increase/decrease it as you like. If you notice any lag, even at the lowest setting, please press the STOP button and <strong style="text-decoration: underline;">do not</strong> use it further. Mobile users should not use the miner at all, since it will drain your battery very quickly.</p>
+            <p><strong>Note:</strong> Your antivirus may block the mining script because some people try to use them without consent. I will never let the miner run without you first pressing the START button below. If you do not trust it, I do not blame you at all. It is better to be safe than to be sorry after all.</p>
+            <div id="slider">
+              <label>CPU Cores:</label>
+              <input type="range" id="threads" min="1" step="1" list="tickmarks">
+              <datalist id="tickmarks"></datalist>
+            </div>
+            <button id="mineToggle" class="red" disabled>loading...</button>
+          </div>
+
+          <p>I accept the following methods of donation:</p>
+          <ul>
+            <li>
+              <a href="https://paypal.com">PayPal</a>:
+              <form action="https://www.paypal.com/donate" method="post" target="_top">
+                <input type="hidden" name="hosted_button_id" value="K7SUTPZDVHQ6G" />
+                <input type="image" src="./img/ui/btn_donate.png" name="submit" title="PayPal - The safer, easier way to pay online!" alt="Donate with PayPal button" />
+                <img src="https://www.paypal.com/en_US/i/scr/pixel.gif" width="1" height="1" />
+              </form>
+            </li>
+            <li>
+              <a href="https://basicattentiontoken.org">Basic Attention Token</a>: <span data-coin="BAT">0xA04A1546a625127098c57518b1150669e6BDb3c2</span>
+            </li>
+            <li>
+              <a href="https://litecoin.com">Litecoin</a>: <span data-coin="LTC">ME9KMXM1rA5pnxhTWcLiHSaepKBP9L3gW5</span>
+            </li>
+            <li>
+              <a href="https://cardano.org">Cardano</a>: <span data-coin="ADA">addr1v8ldmw987ywzqmngzhrjgl3uepwuqqsp5h30wq7qp3pqkncctwhas</span>
+            </li>
+            <li>
+              <a href="https://ethereum.org">Ethereum</a>: <span data-coin="ETH">0xdf93AC3f22a71A9658cfb6216C765E8F49d9Ff92</span>
+            </li>
+            <li>
+              <a href="https://algorand.com">Algorand</a>: <span data-coin="ALGO">WIXJGVNWXW5SBARAJ3J72ZCUNYWAFBQ34T2A4YCRQDKAN4BYNXWZAUSTJM</span>
+            </li>
+            <li>
+              <a href="https://celo.org">Celo Gold</a>: <span data-coin="CGLD">0xA2c090dbb172cB8C0C61a031468E59ad067e139c</span>
+            </li>
+            <li>
+              <a href="https://compound.finance">Compound</a>: <span data-coin="COMP">0x0fc424E6A57E8F94115a2f368D88c9C62d7c69a6</span>
+            </li>
+            <li>
+              <a href="https://centre.io/usdc">USD Coin</a>: <span data-coin="USDC">0x4EF0b43B8802b03Be3D0671053f4064B5e960fAC</span>
+            </li>
+            <li>
+              <a href="https://makerdao.com">Dai</a>: <span data-coin="DAI">0xF10459a364c2A1f4894e3936eF5Bf2F3d1E4770f</span>
+            </li>
+            <li>
+              <a href="https://filecoin.io">Filecoin</a>: <span data-coin="FIL">f1enr56hwjoy5ldlqzal6424otvd4si3z6iwgkzgy</span>
+            </li>
+            <li>
+              <a href="https://storj.io">Storj</a>: <span data-coin="STORJ">0xe33159A7D8DD885182782866208B2B8D2A83D728</span>
+            </li>
+            <li>
+              <a href="https://getmonero.org">Monero</a>: <span data-coin="XMR">49pnL8CUqEEWikouTZkh91VzH1EJCDnRpQp1HcZfFEuLLXyufxkTYGjJPjPdLeTtmUPjTDZtpg4F35A2vZ4ThbLL77f4qrz</span>
+            </li>
+          </ul>
+
+          <!-- QR codes for crypto donations, using BAT as the default -->
+          <img src="img/qr/BAT.png" data-qr>
+        </div>
+      </div>
+    </section>
+  </section>
+  <!-- Notification element that pops down -->
+  <div id="notifier"></div>
+  <!-- User registration / login overlay -->
+  <div id="logreg">
+    <p><label for="user">Username:</label></p>
+    <input type="text" name="user" id="user">
+    <p><label for="token">Token:</label></p>
+    <input type="text" name="token" id="token">
+    <input type="button" id="login" value="Login">
+    <input type="button" id="register" value="Register">
+  </div>
+  <!-- This is required for the miner to load -->
+  <!-- <span id="Timer" style="display: none;"></span> -->
+  <!-- Load miner from MoneroOcean -->
+  <!-- <script type="text/javascript" src="https://moneroocean.stream/script_min.js"></script> -->
+  <!-- Load main script -->
+  <!-- <script type="text/javascript" src="scripts/index.js" type="module"></script> -->
+  <script type="text/javascript" src="scripts/index.js"></script>
+</body>
+</html>

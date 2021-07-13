@@ -1,0 +1,4 @@
+This is a Brave Rewards publisher verification file.
+
+Domain: serenityexplorer.tk
+Token: f0b1336de5f72ff9b7f804af102b2f127b93d0a02c220ee0266a93671a4ef283

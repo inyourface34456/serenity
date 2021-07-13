@@ -1,0 +1,21 @@
+{
+  "name": "serenity",
+  "version": "1.0.0",
+  "description": "SpaceTraders.io Game Client",
+  "keywords": [
+    "SpaceTraders",
+    "space",
+    "api",
+    "game"
+  ],
+  "author": "John-Michael Glenn",
+  "license": "0BSD",
+  "bugs": {
+    "url": "https://github.com/phyreman/serenity/issues"
+  },
+  "homepage": "https://serenityexplorer.tk",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/phyreman/serenity.git"
+  }
+}

@@ -1,0 +1,445 @@
+/***** Tag overrides *****/
+body, hr, p {
+	margin: 0;
+}
+body {
+	background: 0/15% url("../img/ui/bg.png");
+	font-family: Courier;
+}
+datalist {
+	display: flex;
+	justify-content: space-between;
+}
+h1 {
+	margin: 10px 0;
+}
+audio {
+	height: 30px;
+	width: 150px;
+}
+ul {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+pre {
+	display: inline-block;
+	margin: 0;
+}
+form {
+	display: inline-block;
+}
+
+button {
+	border-radius: 5px;
+	color: #FFF;
+	cursor: pointer;
+	height: 30px;
+}
+button:disabled {
+	cursor: not-allowed;
+	opacity: 0.75;
+}
+button.red {
+	background-color: firebrick;
+}
+button.green {
+	background-color: darkgreen;
+}
+button.blue {
+	background-color: darkslateblue;
+}
+button.scrap {
+	margin-top: -30px;
+	position: absolute;
+}
+button.jettison {
+	background-color: #cd9600;
+	margin-top: 5px;
+	position: absolute;
+}
+button.transfer {
+	margin-top: 40px;
+	position: absolute;
+}
+
+/***** Make overlay that flickers out *****/
+@keyframes flickerAnimation {
+	0%   { opacity: 0; }
+	10%  { opacity: 1; }
+	15%  { opacity: 0; }
+	20%  { opacity: 1; }
+	30%  { opacity: 0; }
+	40%  { opacity: 1; }
+	50%  { opacity: 0; }
+	100% { opacity: 1; }
+}
+#lightsOutOverlay {
+	background-color: rgba(0, 0, 0, 0.75);
+	float: left;
+	height: 100%;
+	margin-top: -10px;
+	position: fixed;
+	visibility: hidden;
+	width: 100%;
+	z-index: 1;
+}
+.flicker {
+	animation: flickerAnimation 1s 1;
+	visibility: visible;
+}
+
+/***** Notification Bar *****/
+@keyframes slideNotifier {
+	0%, 100% {
+		transform: translateY(-50px);
+	}
+	20%, 75% {
+		transform: translateY(0px);
+	}
+}
+#notifier {
+	position: fixed;
+	top: 0;
+	left: 0;
+	text-align: center;
+	font-weight: bold;
+	box-shadow: 0 0 1px #000;
+	width: 100%;
+	padding: 5px 0;
+	background-color: green;
+	transform: translateY(-50px);
+}
+.slideNotifier {
+	animation: slideNotifier 6s 1 ease forwards;
+}
+
+/***** Login/Registration *****/
+@keyframes slideLogregDown {
+	from {
+		transform: translateY(-350px);
+	}
+	to {
+		transform: translateY(calc(50vh - 65.5px));
+	}
+}
+@keyframes slideLogregUp {
+	from {
+		transform: translateY(calc(50vh - 65.5px));
+	}
+	to {
+		transform: translateY(-350px);
+	}
+}
+.slideLogregDown {
+	animation: slideLogregDown 1s 1 ease-out forwards;
+}
+.slideLogregUp {
+	animation: slideLogregUp 1s 1 ease-in forwards;
+}
+#logreg {
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 2px solid #000;
+	box-shadow: 0 0 5px #000;
+	color: #FFF;
+	left: calc(50vw - 156px);
+	padding: 5px;
+	position: absolute;
+	top: 0px;
+	transform: translateY(-350px);
+	width: 300px;
+}
+#logreg label {
+	float: left;
+	clear: left;
+	font-weight: bold;
+}
+#logreg > p:nth-child(3) > label {
+	margin-top: 5px;
+}
+#logreg > input:not(:last-child) {
+	clear: left;
+	float: left;
+	margin-top: 5px;
+}
+#logreg > input[type="text"] {
+	width: 292px;
+}
+#register {
+	float: left;
+	margin-left: 5px;
+	margin-top: 5px;
+}
+
+/***** Player HUD *****/
+#HUD {
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 2px solid #000;
+	display: grid;
+	grid-column-gap: 40px;
+	grid-row-gap: 10px;
+	grid-template-areas:
+		"nav nav"
+		"main map";
+	grid-template-columns: 50vw calc(50% - 12px);
+	grid-template-rows: 50px auto;
+	height: calc(100vh - 24px);
+	margin: 10px;
+	overflow: hidden;
+	width: calc(100vw - 24px);
+}
+/* Navigation Bar */
+#navbar {
+	background-color: rgba(0, 0, 0, 0.5);
+	grid-area: nav;
+	height: 50px;
+	width: calc(100vw - 24px);
+}
+#navbar > a {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: #FFF;
+	float: left;
+	height: 50px;
+}
+#navbar > a:nth-last-of-type(-n+3) {
+	float: right;
+}
+#navbar > a > img {
+	height: 50px;
+}
+.credits {
+	padding: 0 5px 0 5px;
+}
+
+/* Radio */
+#radio {
+	cursor: default;
+	text-align: center;
+	width: 215px;
+}
+#radio > img {
+	cursor: pointer;
+}
+#station_name {
+	color: chartreuse;
+}
+/* This style seems to get overridden by the #navbar > a > img rule above, unsure why */
+#radio_previous, #radio_play, #radio_pause, #radio_next {
+	background: #FFF;
+	border-radius: 5px;
+	height: 24px !important;
+	padding: 1px;
+}
+
+/* Pages */
+#home, #ships, #finances, #markets, #profile {
+	background-color: rgba(255, 255, 255, 0.5);
+	border: 1px solid #FFF;
+	display: none;
+	font-size: 18px;
+	grid-area: main;
+	margin: 0 0 10px 10px;
+	overflow: hidden;
+	padding: 5px;
+}
+
+/* Map */
+#map_container {
+	background-color: rgba(0, 0, 0, 0.75);
+	font-size: 16px;
+	grid-area: map;
+	height: calc(100vh - 94px);
+	visibility: hidden;
+}
+#grid, #map, #tooltips {
+	height: inherit;
+	min-height: 200px;
+	min-width: 200px;
+	object-fit: contain;
+	position: absolute;
+	width: auto;
+}
+#grid {
+	background-color: #000;
+}
+#map_tabs {
+	background-color: rgba(127, 127, 127, 0.5);
+	border-radius: 5px 0 0 5px;
+	margin: 0;
+	padding: 5px;
+	position: absolute;
+	transform: translateX(-40px);
+	width: 30px;
+}
+#map_tabs > li:not(:first-child) {
+	padding-top: 5px;
+}
+#map_tabs a {
+	color: #FFF;
+	text-decoration: none;
+}
+#map_tabs a:hover {
+	text-decoration: revert;
+}
+
+#AU {
+	background-color: rgba(127, 127, 127, 0.5);
+	color: #FFF;
+	cursor: default;
+	margin: 0;
+	padding: 5px;
+	position: absolute;
+}
+
+#shiplist, #fleet, #loans, #outstanding {
+	font-weight: bold;
+	margin-right: -50px;
+	overflow-y: scroll;
+	padding-right: 45px;
+}
+#profile_inner {
+	height: 100%;
+	margin-right: -50px;
+	overflow-y: scroll;
+	padding-right: 35px;
+}
+
+#ships {
+	overflow: hidden;
+}
+#shiplist, #fleet {
+	height: 100%;
+}
+#shiplist > h1, #fleet > h1 {
+	margin-left: 10px;
+}
+#shiplist > ul, #fleet > ul {
+	padding-left: 10px;
+}
+#shiplist > ul > li, #fleet > ul > li, #finances ul > li {
+	background-color: rgba(0, 0, 0, 0.5);
+	border: 2px solid black;
+	color: cadetblue;
+	padding: 5px;
+}
+#shiplist > ul > li:not(:first-of-type), #fleet > ul > li:not(:first-of-type), #finances ul > li:not(:first-of-type) {
+	margin-top: 10px;
+}
+#shiplist > ul > li > p:first-of-type {
+	color: lightsteelblue;
+}
+#shiplist > ul > li > p > img, #fleet > ul > li > p > img {
+	width: 48px;
+}
+#shiplist > ul > li > p > pre {
+	font-size: 18px;
+	transform: translateY(-75%);
+}
+#shiplist > ul > li > p:not(.stat), #fleet > ul > li > p:not(.stat) {
+	margin-bottom: 5px;
+	padding: 0 5px 0 5px;
+}
+.stat {
+	color: silver;
+	display: inline-block;
+	width: 90px;
+}
+#shiplist p.stat:not(:last-of-type) {
+	margin-right: 10px;
+}
+#shiplist > ul > li > ul > li:not(:first-of-type) {
+	margin-top: 5px;
+}
+#shiplist > ul > li > div > p, #shiplist > ul > li > ul > li > p {
+	display: inline-block;
+	margin-right: 5px;
+	text-align: right;
+	width: 285px;
+}
+#ship_filter {
+	color: indigo;
+	float: right;
+	margin-top: 10px;
+}
+#ship_filter > select {
+	border-radius: 5px;
+}
+
+#fleet p.stat {
+	text-align: center;
+	width: 75px;
+}
+#fleet > ul > li > p > pre {
+	display: block;
+}
+
+#finances > div {
+	padding-left: 10px;
+}
+#loans p {
+	background-color: rgba(0, 0, 0, 0.5);
+	color: cadetblue;
+	padding: 0 5px 5px 5px;
+}
+#loans p:last-of-type {
+	margin-bottom: 5px;
+}
+
+/* QR Code for donations */
+[data-qr] {
+	background-color: #FFF;
+	float: right;
+	height: 200px;
+	margin-top: -510px;
+	padding: 5px;
+	width: 200px;
+}
+[data-coin] {
+	cursor: pointer;
+}
+
+/* Profile/Settings/Donation Page */
+#profile {
+	color: #FFF;
+	padding: 5px;
+}
+#profile p {
+	padding-bottom: 10px;
+	padding-left: 5px;
+}
+#profile_inner > div > p, #quarry {
+	background-color: rgba(0, 0, 0, 0.5);
+}
+#profile ul {
+	background-color: rgba(0, 0, 0, 0.5);
+	float: left;
+	overflow-wrap: anywhere;
+	padding-left: 5px;
+	padding-top: 10px;
+}
+#profile ul > li {
+	margin-bottom: 5px;
+}
+#profile a, #profile a:visited {
+	color: gold;
+	text-decoration: none;
+}
+
+#slider, #mineToggle {
+	margin-left: 5px;
+}
+#slider, #slider > input {
+	width: 140px;
+}
+#mineToggle {
+	text-transform: uppercase;
+}
+
+#unfinished {
+	border: 2px solid #000;
+	display: none;
+	padding: 5px;
+}
+#unfinished > h1 {
+	color: darkred;
+}
