@@ -1,4 +1,4 @@
-/* global Nimiq */
+/* global Util, Nimiq */
 // eslint-disable-next-line multiline-comment-style
 // import Semaphore from "./Semaphore.js";
 // import Util from "./Util.js";
@@ -105,13 +105,13 @@ const loadSettings = input => {
 				{
 					"id": "963cf3ba-0601-11e8-ae97-52543be04c81",
 					"name": "Soma FM Deep Space One",
-					"url": "http://ice1.somafm.com/deepspaceone-128-aac"
+					"url": "https://ice1.somafm.com/deepspaceone-128-aac"
 				},
 				// Soma FM Space Station - Energetic space-like and electronic music
 				{
 					"id": "960d3f6f-0601-11e8-ae97-52543be04c81",
 					"name": "Soma FM Space Station",
-					"url": "http://ice1.somafm.com/spacestation-128-aac"
+					"url": "https://ice1.somafm.com/spacestation-128-aac"
 				}
 			],
 			"status": "paused" // Playing, paused, etc.
@@ -1336,5 +1336,5 @@ window.addEventListener("load", () => {
 
  * POST /game/structures/:structureId/deposit shipId=:shipId good=:goodSymbol quantity=:quantity - Deposit material to a structure
 
- * POST https://api.spacetraders.io/users/{username}/warp-jump shipId=:shipId - Jump through warp gate
+ * POST /users/{username}/warp-jump shipId=:shipId - Jump through warp gate
 */
