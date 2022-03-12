@@ -723,7 +723,7 @@ window.addEventListener("resize", () => {
 
 /* Begin game logic */
 const fetchMyData = () => {
-	THROTTLE.callFn(fetchWrap, "/my/account", { "method": "GET" })
+	THROTTLE.add(fetchWrap, "/my/account", { "method": "GET" })
 		.then(data => {
 			settings.user.credits = data.user.credits;
 			CREDITS.textContent = data.user.credits > 999 ? Util.formatCredits(data.user.credits) : data.user.credits;
@@ -732,7 +732,7 @@ const fetchMyData = () => {
 };
 
 const fetchSystems = () => {
-	THROTTLE.callFn(fetchWrap, "/game/systems", { "method": "GET", "cache": true })
+	THROTTLE.add(fetchWrap, "/game/systems", { "method": "GET", "cache": true })
 		.then(data => {
 			settings.systems = data.systems;
 			settings.user.system = settings.user.system ?? data.systems[0];
@@ -743,7 +743,7 @@ const fetchSystems = () => {
 };
 
 const fetchBuyableShips = shipClass => {
-	THROTTLE.callFn(fetchWrap, `/game/ships${shipClass ? `?class=${shipClass}` : ""}`, { "method": "GET", "cache": true })
+	THROTTLE.add(fetchWrap, `/game/ships${shipClass ? `?class=${shipClass}` : ""}`, { "method": "GET", "cache": true })
 		.then(data => {
 			// First remove any current ship listings, as they are stale
 			SHIPLIST.querySelector("ul")?.remove();
@@ -830,7 +830,7 @@ const fetchBuyableShips = shipClass => {
 					buy_btn.classList.add("blue");
 					if (settings.user.credits < loc.price) buy_btn.disabled = true;
 					buy_btn.addEventListener("click", () => {
-						THROTTLE.callFn(fetchWrap, "/users/$username/ships", {
+						THROTTLE.add(fetchWrap, "/users/$username/ships", {
 							"username": settings.user.username,
 							"location": buy_btn.dataset.location,
 							"type": buy_btn.dataset.type
@@ -864,7 +864,7 @@ const fetchBuyableShips = shipClass => {
 					buy_btn.classList.add("blue");
 					if (settings.user.credits < loc.price) buy_btn.disabled = true;
 					buy_btn.addEventListener("click", event => {
-						THROTTLE.callFn(fetchWrap, "/users/$username/ships", {
+						THROTTLE.add(fetchWrap, "/users/$username/ships", {
 							"method": "POST",
 							"body": JSON.stringify({
 								"username": settings.user.username,
@@ -982,7 +982,7 @@ const displayOwnedShips = () => {
 			btn.textContent = "Scrap Ship";
 			btn.classList.add("red", "scrap");
 			btn.addEventListener("click", event => {
-				THROTTLE.callFn(fetchWrap, `/users/$username/ships/${event.currentTarget.parentNode.dataset.id}`, { "method": "DELETE" })
+				THROTTLE.add(fetchWrap, `/users/$username/ships/${event.currentTarget.parentNode.dataset.id}`, { "method": "DELETE" })
 					.then(data => {
 						// TODO Update when result is fixed to return credits
 						const credits = parseInt(data.success.split(/\s/)[3]);
@@ -1000,7 +1000,7 @@ const displayOwnedShips = () => {
 			if (ship.cargo.length < 1) btn.disabled = true;
 			btn.addEventListener("click", () => {
 				// TODO Pop down a dialog to choose which good and the quantity
-				THROTTLE.callFn(fetchWrap, `/users/$username/ships/${event.currentTarget.parentNode.dataset.id}/jettison`, {
+				THROTTLE.add(fetchWrap, `/users/$username/ships/${event.currentTarget.parentNode.dataset.id}/jettison`, {
 					"method": "POST",
 					"body": JSON.stringify({
 						"good": "",
@@ -1036,7 +1036,7 @@ const displayOwnedShips = () => {
 	});
 };
 const fetchOwnedShips = () => {
-	THROTTLE.callFn(fetchWrap, "/users/$username/ships", { "method": "GET" })
+	THROTTLE.add(fetchWrap, "/users/$username/ships", { "method": "GET" })
 		.then(data => {
 			settings.user.ships = data.ships;
 			displayOwnedShips();
@@ -1073,7 +1073,7 @@ const displayLoans = () => {
 			btn.classList.add("green");
 			if (settings.user.credits < loan.repaymentAmount) btn.disabled = true;
 			btn.addEventListener("click", () => {
-				THROTTLE.callFn(fetchWrap, `/users/$username/loans/${settings.user.activeLoan.id}`, { "method": "PUT" })
+				THROTTLE.add(fetchWrap, `/users/$username/loans/${settings.user.activeLoan.id}`, { "method": "PUT" })
 					.then(() => {
 						settings.user.credits -= settings.user.activeLoan.repaymentAmount;
 						CREDITS.textContent = settings.user.credits > 999 ? Util.formatCredits(settings.user.credits) : settings.user.credits;
@@ -1092,14 +1092,14 @@ const displayLoans = () => {
 	});
 };
 const fetchOutstandingLoans = () => {
-	THROTTLE.callFn(fetchWrap, "/users/$username/loans", { "method": "GET" })
+	THROTTLE.add(fetchWrap, "/users/$username/loans", { "method": "GET" })
 		.then(data => {
 			settings.user.loans = data.loans;
 			displayLoans();
 		});
 };
 const fetchAvailableLoans = () => {
-	THROTTLE.callFn(fetchWrap, "/game/loans", { "method": "GET" }).then(data => {
+	THROTTLE.add(fetchWrap, "/game/loans", { "method": "GET" }).then(data => {
 		LOANS.querySelector("ul")?.remove();
 		const ul = document.createElement("ul");
 		let li, p, btn;
@@ -1129,7 +1129,7 @@ const fetchAvailableLoans = () => {
 			btn.classList.add("green");
 			btn.addEventListener("click", event => {
 				event.currentTarget.disabled = true;
-				THROTTLE.callFn(fetchWrap, "/users/$username/loans", {
+				THROTTLE.add(fetchWrap, "/users/$username/loans", {
 					"method": "POST",
 					"body": JSON.stringify({ "type": event.currentTarget.dataset.type })
 				})
@@ -1188,7 +1188,7 @@ REGISTER_btn.addEventListener("click", () => {
 		Util.notify("Only a username is required during registration. Please remove the token.", { "backgroundColor": "yellow" });
 		return;
 	}
-	fetchWrap(`/users/${USER_input.value.trim()}/claim`, { "method": "GET" })
+	fetchWrap(`/users/${USER_input.value.trim()}/claim`, { "method": "POST" })
 		.then(data => {
 			// Process token
 			settings.user.username = data.user.username;
@@ -1235,7 +1235,7 @@ const launch = () => {
 						THROTTLE.currentRequests = settings.API.queue;
 						settings.API.queue = [];
 						// Start the first job in the list
-						// THROTTLE.tryNext();
+						// THROTTLE.next();
 					}
 					*/
 
