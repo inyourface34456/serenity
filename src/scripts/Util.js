@@ -22,7 +22,7 @@ class Util {
 				if (Array.isArray(data)) data = new Blob([data], {type: "text/plain;charset=utf-8"})
 				if (data instanceof Set) data = new Blob([[...data]], {type: "text/plain;charset=utf-8"})
 				if (data instanceof Map) {
-					data = [...data].map(x => {
+					data = (await Promise.all([...data].map(async x => {
 						let [key, value] = [...x]
 						switch (typeof value) {
 							case "object":
@@ -30,7 +30,7 @@ class Util {
 							default:
 								return `${key} = ${value}`
 						}
-					}).join("\r\n")
+					}))).join("\r\n")
 					data = new Blob([data], {type: "text/plain;charset=utf-8"})
 				}
 				if (!data.arrayBuffer) data = new Blob([JSON.stringify(data)], {type: "application/json"})
@@ -139,8 +139,7 @@ class Util {
 		NOTIFIER.textContent = msg.toUpperCase()
 		if (opts) {
 			NOTIFIER.oldStyle = Object.assign({}, NOTIFIER.style)
-			for (let opt in opts)
-				NOTIFIER.style[opt] = opts[opt]
+			opts.forEach(async opt => NOTIFIER.style[opt] = opts[opt])
 		}
 		NOTIFIER.classList.add("slideNotifier")
 	}
